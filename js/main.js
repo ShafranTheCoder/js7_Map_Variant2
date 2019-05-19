@@ -1,34 +1,37 @@
 'use strict';
 
 function showList(list) {
-    let array = [];
-    let newArray = [];
-    let finalArray = [];
-    function traverse(theObject) {
 
-        for (let key in theObject) {
-            if (theObject[key] != null && typeof (theObject[key]) == 'object') {
-                traverse(theObject[key]);
+    function arrToUl(root, arr) {
+        let ul = document.createElement('ul');
+        let li;
 
-            } else {
+        root.appendChild(ul);
 
-                array.push(theObject[key]);
-                newArray = array.map(word => `<li>${word}</li>`);
-                finalArray = newArray.join('');
-                document.body.children[2].innerHTML = finalArray;
+        arr.forEach(function(item) {
+            if (Array.isArray(item)) {
+                arrToUl(li, item);
+                return;
             }
-        }
+
+            li = document.createElement('li');
+            li.appendChild(document.createTextNode(item));
+            ul.appendChild(li);
+        });
     }
-    traverse(list);
+
+    let div = document.getElementById('myList');
+
+    arrToUl(div, list);
 
     let i = 10;
     let timerId = setInterval(function() {
         document.getElementById("timer").innerText = i;
         if (i === 0) {
-        document.getElementById('list').classList.add("none");
+        document.getElementById('myList').classList.add("none");
         document.getElementById('timer').classList.add("none");
         clearInterval(timerId);
-        newArray = [];
+        list = [];
         }
 
         i--;
@@ -36,5 +39,5 @@ function showList(list) {
 
 }
 
-showList(['hello', 'world', {name: "Dima", sName: "Bog"}, 'Kiev', 'Kharkiv', 'Odessa', 'Lviv']);
-
+showList(['hello', 'world', ["Dima","Bogutskii"], 'Kiev', 'Kharkiv', 'Odessa', 'Lviv']);
+//works only for lists in array;
